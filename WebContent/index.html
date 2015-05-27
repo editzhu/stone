@@ -56,7 +56,7 @@ $("#ini").click(function(){
 	send(3);
 	});
 function send(para){
-	htmlobj=$.ajax({url:"http://localhost:8080/stone/Fapai?para="+para,async:false});
+	htmlobj=$.ajax({url:"http://192.168.254.1:8080/stone/Fapai?para="+para,async:false});
 	  var obj = jQuery.parseJSON(htmlobj.responseText); 
 	  console.log(htmlobj.responseText);
 	  $(".l1").html('<div class="l">'+obj.l1+"</div>"+'<div class="f">'+obj.f1+"</div>");

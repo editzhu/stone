@@ -38,7 +38,7 @@ public class Fapai extends HttpServlet {
 
 	if ("".equals(match.session1)) {
 	    match.session1 = session.getId();
-	} else if ("".equals(match.session2)) {
+	} else if ((!session.getId().equals(match.session1)) && "".equals(match.session2)) {
 	    match.session2 = session.getId();
 	}
 
