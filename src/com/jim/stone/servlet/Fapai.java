@@ -42,10 +42,10 @@ public class Fapai extends HttpServlet {
 	    match.session2 = session.getId();
 	}
 
-	if (!(match.isMyRound && match.session1.equals(session.getId()))) {
+	if (!(match.isRound && match.session1.equals(session.getId()))) {
 	    System.out.println("feifa1");
 	    // return;
-	} else if (!(!match.isMyRound && match.session2.equals(session.getId()))) {
+	} else if (!(!match.isRound && match.session2.equals(session.getId()))) {
 	    System.out.println("feifa2");
 	    // return;
 	}
@@ -56,11 +56,17 @@ public class Fapai extends HttpServlet {
 	String para = request.getParameter("para");
 
 	if ("1".equals(para))
-	    match.dachu();
-	if ("2".equals(para))
-	    match.zhuapai();
-	if ("3".equals(para))
+	    match.zhuapai(session.getId());
+	if ("2".equals(para.substring(0, 1))) {
+	    System.out.println(new Integer(para.substring(2)));
+	    match.dachu(session.getId(), new Integer(para.substring(2)));
+	}
+	if ("ini".equals(para))
 	    match.Matchini();
+	if ("stop".equals(para))
+	    match.stop();
+	if ("attack".equals(para))
+	    match.attack(session.getId());
 	String s = match.getAll(match);
 	out.print(s);
 	out.flush();

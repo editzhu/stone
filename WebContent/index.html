@@ -4,6 +4,7 @@
     <meta name="generator"
     content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
     <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <style>
 .pai {float:left;background-color:rgb(109,143,41);width:50px;height:70px;border:10px solid rgb(173,218,77);}
 .attack {text-align: center;color:blue;background-color:rgb(109,143,111);width:20px;height:20px;position:absolute;top:60px;}
@@ -20,6 +21,7 @@ center;color:white;background-color:rgb(109,143,111);width:20px;height:20px;posi
     <div style="background-color:#AAAAAA;width:1000px;height:570px;position: absolute;top:10px;left:10px">
       <div class="session2" style="color:white;background-color:#555555;width:280px;height:20px;position: absolute;top:10px;left:100px"></div>
       <div class="l2" style="background-color:#555555;width:100px;height:70px;position: absolute;top:10px;left:400px"></div>
+      <div class="jiji" style="background-color:#555555;width:100px;height:70px;position: absolute;top:10px;left:800px"></div>
       <div class="sp2" style="background-color:#555555;width:700px;height:90px;position: absolute;top:90px;left:100px"></div>
       <div class="cp2" style="background-color:#555555;width:490px;height:90px;position: absolute;top:190px;left:205px"></div>
       <div class="pk2" style="background-color:#555555;width:20px;height:20px;position: absolute;top:190px;left:800px"></div>
@@ -31,62 +33,15 @@ center;color:white;background-color:rgb(109,143,111);width:20px;height:20px;posi
     </div>
     <div style="float:left;background-color:#AAAAAA;width:100px;height:570px;position: absolute;top:10px;left:1020px">
       <div id="myDiv">
-        <h2>Let AJAX change this text</h2>
+        Response
       </div>
-      <button id="b01" type="button">Change Content</button>
+      <button id="b01" type="button">flash</button>
       <button id="zhupai" type="button">zhua pai</button>
-      <button id="dachu2" type="button">dachu dier ÕÅ pai</button>
+      <input id="dachu_index" value="0" size="1"/><button id="dachu" type="button">dachu</button>
+      <button id="attack" type="button">attack</button>
+      <button id="stop" type="button">stop</button>
       <button id="ini" type="button">ini</button>
     </div>
-<script>
-$(document).ready(function(){
-  $("#b01").click(function(){
 
-  
-  });
-});
-
-$("#dachu2").click(function(){
-	send(1);
-	});
-$("#zhupai").click(function(){
-	send(2);
-	});
-$("#ini").click(function(){
-	send(3);
-	});
-function send(para){
-	htmlobj=$.ajax({url:"http://192.168.254.1:8080/stone/Fapai?para="+para,async:false});
-	  var obj = jQuery.parseJSON(htmlobj.responseText); 
-	  console.log(htmlobj.responseText);
-	  $(".l1").html('<div class="l">'+obj.l1+"</div>"+'<div class="f">'+obj.f1+"</div>");
-	  $(".l2").html('<div class="l">'+obj.l2+"</div>"+'<div class="f">'+obj.f2+"</div>");
-	  
-	  $(".session1").html(obj.session1); 
-	  $(".session2").html(obj.session2); 
-	  $(".pk1").html(obj.pk1Size); 
-	  $(".pk2").html(obj.pk2Size); 
-	  $(".sp1").html("");//Çå¿Õ
-	  	for(var i =0 ;i<obj.sp1.length;i++){
-	 		$(".sp1").append("<div class=pai>"
-	 				+"<div class=attack>"+obj.sp1[i].attack+"</div>"
-	 				+"<div class=life>"+obj.sp1[i].life+"</div>"
-	 				+"<div class=name>"+obj.sp1[i].name+"</div>"
-	 				+"<div class=price>"+obj.sp1[i].price+"</div>"
-	 				+"</div>");
-	 		  	}
-	  
-	  	 $(".cp1").html("");//Çå¿Õ
-	  	for(var i =0 ;i<obj.cp1.length;i++){
-	 		$(".cp1").append("<div class=pai>"
-	 				+"<div class=attack>"+obj.cp1[i].attack+"</div>"
-	 				+"<div class=life>"+obj.cp1[i].life+"</div>"
-	 				+"<div class=name>"+obj.cp1[i].name+"</div>"
-	 				+"<div class=price>"+obj.cp1[i].price+"</div>"
-	 				+"</div>");
-	 		  	}  
-	  $("#myDiv").html("response OK");
-}
-</script>
   </body>
 </html>
