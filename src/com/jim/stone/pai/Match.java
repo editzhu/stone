@@ -1,80 +1,136 @@
 package com.jim.stone.pai;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 
 public class Match {
-    private List<BasePai> pk1 = new ArrayList<BasePai>();// 己方牌库
-    private List<BasePai> pk2 = new ArrayList<BasePai>();// 对方牌库
-    private List<BasePai> sp1 = new ArrayList<BasePai>();// 己方手牌
-    private List<BasePai> sp2 = new ArrayList<BasePai>();// 对方手牌
-    private List<MatchPai> cp1 = new ArrayList<MatchPai>();// 己方场牌
-    private List<MatchPai> cp2 = new ArrayList<MatchPai>();// 对方场牌
 
-    private int f1;// 己方费
-    private int f2;// 对方费
-    private int l1;// 己方血
-    private int l2;// 对方血
+    public Match() {
+	player = new Player[2];
+	player[0] = new Player();
+	player[1] = new Player();
+    }
+
+    Player[] player;
     public boolean isRound = true;// 是否是己方这轮.true=1方轮,false=2方轮
 
     public String session1 = "";
     public String session2 = "";
-    public int is1 = 0;// 是否1号,true=1号,false=2号
+    public int is1 = 0;// 是否1号,1=1号,2=2号
+    public int stage = 0;// 阶段
 
-    public void Matchini() {
-	PaiKu paiKu = new PaiKu();
-	pk1 = paiKu.getPaiList1();
-	pk2 = paiKu.getPaiList2();
-	cp1.clear();
-	cp2.clear();
-	sp1.clear();
-	sp2.clear();
-	f1 = 1;
-	f2 = 1;
-	l1 = 30;
-	l2 = 30;
+    public String reponse(String tag, String sessionId, int fromPai, int toPai) {
+	if (session1.equals(sessionId))
+	    is1 = 1;
+	else if (session2.equals(sessionId))
+	    is1 = 2;
+	else
+	    is1 = 0;
+	if (stage == 0) {
+	    System.out.println(session1 + session2);
+	    System.out.println("stage1:" + stage);
+	    if (session1.length() > 0 && session2.length() > 0) {
+		System.out.println("stage2:" + stage);
+		// stage 1 开始之前的准备
+
+		player[0].price = 10;
+		player[1].price = 10;
+		zhuapai(0);
+		zhuapai(0);
+		zhuapai(0);
+		zhuapai(1);
+		zhuapai(1);
+		zhuapai(1);
+		zhuapai(1);
+		dachu(0, 0);
+		dachu(0, 0);
+		dachu(1, 0);
+		dachu(1, 0);
+		System.out.println("hehe");
+		stage = 1;
+	    }
+	} else if (stage > 0) {
+	    int playerId = -1;
+	    if (sessionId == session1) {
+		playerId = 0;
+	    } else if (sessionId == session2) {
+		playerId = 1;
+	    }
+	    if (playerId < 0) {
+		return "{\"error\":\"session错误\"}";
+	    }
+	    if (!checkRound(sessionId, tag))
+		return "{\"error\":\"不是你的轮\"}";
+	    if (tag.equals("zhuapai")) {
+		zhuapai(playerId);
+	    } else if (tag.equals("dachu")) {
+		dachu(playerId, fromPai);
+	    } else if (tag.equals("ini")) {
+		matchini();
+	    } else if (tag.equals("stop")) {
+		stop(playerId);
+	    } else if (tag.equals("attack")) {
+		attack(playerId, fromPai, toPai);
+	    }
+	    return getAll(this);
+	}
+	return "{\"error\":\"未捕获stage\"}";
+    }
+
+    public void matchini() {
+	PaiKu paiku = new PaiKu();
+	player[0].pk = paiku.getPaiList1();
+	player[1].pk = paiku.getPaiList2();
+	player[0].cp.clear();
+	player[1].cp.clear();
+	player[0].sp.clear();
+	player[1].sp.clear();
+	player[0].price = 0;
+	player[1].price = 0;
+	player[0].life = 30;
+	player[1].life = 30;
+	stage = 0;
     }
 
     public List<MatchPai> getCp1() {
-	return cp1;
+	return player[0].cp;
     }
 
     public List<MatchPai> getCp2() {
-	return cp2;
+	return player[1].cp;
     }
 
     public int getF1() {
-	return f1;
+	return player[0].price;
     }
 
     public int getF2() {
-	return f2;
+	return player[1].price;
     }
 
     public int getL1() {
-	return l1;
+	return player[0].life;
     }
 
     public int getL2() {
-	return l2;
+	return player[1].life;
     }
 
     public int getPk1Size() {
-	return pk1.size();
+	return player[0].pk.size();
     }
 
     public int getPk2Size() {
-	return pk2.size();
+	return player[1].pk.size();
     }
 
     public List<BasePai> getSp1() {
-	return sp1;
+	return player[0].sp;
     }
 
     public List<BasePai> getSp2() {
-	return sp2;
+	return player[1].sp;
     }
 
     public boolean getIsRound() {
@@ -88,95 +144,103 @@ public class Match {
     public String getAll(Match m) {
 
 	String jsonString = JSON.toJSONString(m);
-	System.out.println("match:" + jsonString);
 	return jsonString;
     }
 
-    public void zhuapai(String session) {
-	if (!checkRound(session))
+    public void zhuapai(int playId) {
+	if (player[playId].pk.size() <= 0 || player[playId].sp.size() >= 10) {
 	    return;
-	if (session.equals(session1)) {
-	    System.out.println("you are 1");
-	    zhuapai_ex(pk1, sp1);
 	}
-	if (session.equals(session2)) {
-	    System.out.println("you are 2");
-	    zhuapai_ex(pk2, sp2);
-
-	}
+	int i = (int) (Math.random() * player[playId].pk.size());
+	BasePai basePai = player[playId].pk.get(i);
+	player[playId].pk.remove(i);
+	player[playId].sp.add(basePai);
     }
 
-    private void zhuapai_ex(List<BasePai> p, List<BasePai> s) {
-	if (p.size() > 0) {
-	    int i = (int) (Math.random() * p.size());
-	    BasePai basePai = p.get(i);
-	    p.remove(i);
-	    s.add(basePai);
-	}
-    }
-
-    public void dachu(String session, int index) {
-	if (!checkRound(session))
+    public void dachu(int playId, int index) {
+	// 验证
+	if (player[playId].sp.size() <= index)
 	    return;
-	if (session.equals(session1)) {
-	    System.out.println("you are 1");
-	    dachu_ex(sp1, cp1, index);
-	}
-	if (session.equals(session2)) {
-	    System.out.println("you are 2");
-	    dachu_ex(sp2, cp2, index);
-
-	}
-
-    }
-
-    private void dachu_ex(List<BasePai> s, List<MatchPai> c, int index) {
-	if (s.size() <= index)
+	if (player[playId].cp.size() >= D.MAXCP)
 	    return;
-	if (c.size() >= D.MAXCP)
+	// 减费
+	if (player[playId].price - player[playId].sp.get(index).price < 0)
 	    return;
-	BasePai basePai = s.get(index);
-	s.remove(index);
-	List<MatchPai> c1 = c;
+
+	player[playId].price -= player[playId].sp.get(index).price;
+	BasePai basePai = player[playId].sp.get(index);
+	player[playId].sp.remove(index);
 	MatchPai matchPai = new MatchPai(basePai, basePai.life);
-	c1.clear();
-	c1.add(matchPai);
-	c1.addAll(c);
-	c = c1;
+	// 加步数
+	matchPai.setStep(0);// 刚dachu,setp=0
+	player[playId].cp.add(index, matchPai);
     }
 
-    public void attack(String session) {
-	if (!checkRound(session))
-	    return;
-	if (session.equals(session1)) {
-	    attack_ex(cp1, l2);
+    // attacker 0-15,byattacker 0-15
+    public void attack(int playerId, int attacker, int byAttacker) {
+	int att;
+	int byAtt;
+	if (playerId == 0) {
+	    att = 0;
+	    byAtt = 1;
+	} else {
+	    att = 1;
+	    byAtt = 0;
 	}
-	if (session.equals(session2)) {
-	    System.out.println("you are 2");
-	    attack_ex(cp2, l1);
-
-	}
-    }
-
-    public void attack_ex(List<MatchPai> c, int life) {
-
-	if (c.size() <= 0)
+	System.out.println(playerId + ":" + att + ":" + byAtt + ":" + attacker + ":" + byAttacker);
+	// 检测步
+	if (player[att].cp.get(attacker).getStep() <= 0)
 	    return;
-	l2 = l2 - c.get(0).attack;
+	if (byAttacker == 7) {// 7就是本体
+	    player[byAtt].life = player[byAtt].life - player[att].cp.get(attacker).attack;
+	    // 减步
+	    player[att].cp.get(attacker).setStep(0);
+	} else {
+	    if (player[att].cp.size() <= attacker || player[byAtt].cp.size() <= byAttacker)
+		return;
+	    player[byAtt].cp.get(byAttacker).life = player[byAtt].cp.get(byAttacker).life - player[att].cp.get(attacker).attack;
+	    // 减步
+	    player[att].cp.get(attacker).setStep(0);
+	}
+
+	// 检测Life
+	for (int i = 0; i < 2; i++) {
+	    if (player[i].life <= 0) {
+		gameover();
+	    }
+	}
+	for (int i = 0; i < 2; i++) {
+	    int[] tmp = { 0, 0, 0, 0, 0, 0, 0 };
+	    for (int j = 0; j < player[i].cp.size(); j++) {
+		if (player[i].cp.get(j).life <= 0) {
+		    tmp[j] = 1;
+		}
+	    }
+	    for (int j = 0; j < player[i].cp.size(); j++) {
+		if (tmp[j] == 1) {
+		    System.out.println("delete:" + j);
+		    player[i].cp.remove(j);
+		}
+	    }
+	}
 
     }
 
-    public void stop() {
+    public void stop(int playerId) {
 	isRound = !isRound;
+	if (playerId == 1) {
+	    stage += 1;
+	    // 每回合加费
+	    player[0].price = stage;
+	    player[1].price = stage;
+
+	}
     }
 
-    public boolean checkRound(String session) {
-	if (session1.equals(session))
-	    is1 = 1;
-	else if (session2.equals(session))
-	    is1 = 2;
-	else
-	    is1 = 0;
+    public boolean checkRound(String session, String tag) {
+	if (tag.equals("flash"))
+	    return true;
+
 	if (session1.equals(session) && isRound)
 	    return true;
 	if (session2.equals(session) && (!isRound))
@@ -185,20 +249,12 @@ public class Match {
 	return false;
     }
 
+    public void gameover() {
+	System.out.println("gameover");
+    }
+
     public static void main(String[] args) {
 	Match match = new Match();
-	match.Matchini();
-	match.getAll(match);
-	match.attack_ex(match.cp1, 30);
-	List<String> list = new ArrayList<String>();
-	List<String> l = new ArrayList<String>();
-	list.add("1");
-	list.add("2");
-	System.out.println(list);
-	l.add("3");
-	l.addAll(list);
-	System.out.println(l);
-	list = l;
-	System.out.println(list);
+	System.out.println(match.player[0]);
     }
 }

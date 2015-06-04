@@ -24,6 +24,9 @@ public class PaiKu {
 	    name = D.DB[i][3];
 	    paiList1.add(new BasePai(life, attack, price, name));
 	    paiList2.add(new BasePai(life, attack, price, name));
+	    paiList1.add(new BasePai(life, attack, price, name));
+	    paiList2.add(new BasePai(life, attack, price, name));
+
 	}
 
     }

@@ -23,7 +23,7 @@ public class Fapai extends HttpServlet {
      */
     public Fapai() {
 	super();
-	match.Matchini();
+	match.matchini();
 	// TODO Auto-generated constructor stub
     }
 
@@ -35,40 +35,37 @@ public class Fapai extends HttpServlet {
 	// TODO Auto-generated method stub
 
 	HttpSession session = request.getSession();
-
+	String sessionId = session.getId();
 	if ("".equals(match.session1)) {
-	    match.session1 = session.getId();
+	    match.session1 = sessionId;
 	} else if ((!session.getId().equals(match.session1)) && "".equals(match.session2)) {
-	    match.session2 = session.getId();
-	}
-
-	if (!(match.isRound && match.session1.equals(session.getId()))) {
-	    System.out.println("feifa1");
-	    // return;
-	} else if (!(!match.isRound && match.session2.equals(session.getId()))) {
-	    System.out.println("feifa2");
-	    // return;
+	    match.session2 = sessionId;
 	}
 
 	response.setContentType("text/html;charset=utf-8");
 	PrintWriter out = response.getWriter();
 	request.setCharacterEncoding("utf-8");
 	String para = request.getParameter("para");
-
-	if ("1".equals(para))
-	    match.zhuapai(session.getId());
-	if ("2".equals(para.substring(0, 1))) {
-	    System.out.println(new Integer(para.substring(2)));
-	    match.dachu(session.getId(), new Integer(para.substring(2)));
+	String fromPai = request.getParameter("frompai");
+	String toPai = request.getParameter("topai");
+	System.out.println("f" + fromPai);
+	String rs = "";
+	System.out.println("para:" + para);
+	if ("flash".equals(para))
+	    rs = match.reponse("flash", sessionId, -1, -1);
+	if ("zhuapai".equals(para))
+	    rs = match.reponse("zhuapai", sessionId, -1, -1);
+	if ("dachu".equals(para)) {
+	    rs = match.reponse("dachu", sessionId, new Integer(fromPai), -1);
 	}
 	if ("ini".equals(para))
-	    match.Matchini();
+	    rs = match.reponse("ini", sessionId, -1, -1);
 	if ("stop".equals(para))
-	    match.stop();
+	    rs = match.reponse("stop", sessionId, -1, -1);
 	if ("attack".equals(para))
-	    match.attack(session.getId());
-	String s = match.getAll(match);
-	out.print(s);
+	    rs = match.reponse("attack", sessionId, new Integer(fromPai), new Integer(toPai));
+	System.out.println("rs: " + rs);
+	out.print(rs);
 	out.flush();
 	out.close();
     }

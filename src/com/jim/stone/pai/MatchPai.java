@@ -6,12 +6,21 @@ package com.jim.stone.pai;
 public class MatchPai extends BasePai {
     private int id;
     private int realLife;
+    private int step;
 
     MatchPai(int l, int a, int p, String n) {
 	life = l;
 	attack = a;
 	price = p;
 	name = n;
+    }
+
+    public void setStep(int step) {
+	this.step = step;
+    }
+
+    public int getStep() {
+	return step;
     }
 
     MatchPai(BasePai b, int rl) {
