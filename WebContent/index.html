@@ -1,63 +1,162 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="generator"
-    content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
-    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="js/overlay.js"></script>
-    <style>
-    #overlay {
-    background: #000;
-    filter: alpha(opacity=50); /* IE的透明度 */
-    opacity: 0.9;  /* 透明度 */
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 100; /* 此处的图层要大于页面 */
-   
+<head>
+<meta name="generator"
+	content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/overlay.js"></script>
+<script type="text/javascript" src="js/line.js"></script>
+<style>
+#overlay {
+	background: #000;
+	filter: alpha(opacity = 50); /* IE的透明度 */
+	opacity: 0.9; /* 透明度 */
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 100; /* 此处的图层要大于页面 */
 }
-.pai {float:left;background-color:rgb(109,143,41);width:50px;height:70px;border:10px solid rgb(173,218,77);}
-.ospai {float:left;background-color:rgb(109,143,41);width:50px;height:70px;border:10px solid rgb(173,218,177);}
-.attack {text-align: center;color:blue;background-color:rgb(109,143,111);width:20px;height:20px;position:absolute;top:60px;}
-.price {text-align: center;color:blue;background-color:rgb(109,143,111);width:20px;height:20px;position:relative;top:-40px;left:0px}
-.life {text-align: center;color:red;background-color:rgb(109,143,111);width:20px;height:20px;position:relative;top:50px;left:30px}
-.name {text-align:
-center;color:white;background-color:rgb(109,143,111);width:20px;height:20px;position:relative;top:5px;left:15px}
-.l {text-align: center;color:red;background-color:rgb(109,143,111);width:20px;height:20px;position:absolute;top:25px;left:40px}
-.f {text-align: center;color:blue;background-color:rgb(109,143,111);width:20px;height:20px;position:absolute;top:50px;left:80px}
-</style>
-    <title></title>
-  </head>
-  <body>
-  <div id=overlay><img style="position:absolute;left:50%;top:190px;margin-left:-390px" src="http://mimg.127.net/m/lb/img/inboxBottom/240/2/promPic.jpg" ></div>
-    <div style="background-color:#AAAAAA;width:1000px;height:570px;position: absolute;top:10px;left:10px">
-      <div class="session2" style="color:white;background-color:#555555;width:280px;height:20px;position: absolute;top:10px;left:100px"></div>
-      <div class="l2" style="background-color:#555555;width:100px;height:70px;position: absolute;top:10px;left:400px"></div>
-      <div class="jiji" style="background-color:#555555;width:100px;height:70px;position: absolute;top:10px;left:800px"></div>
-      <div class="stage" style="background-color:#555555;width:100px;height:70px;position: absolute;top:10px;left:680px"></div>
-      <div class="sp2" style="background-color:#555555;width:700px;height:90px;position: absolute;top:90px;left:100px"></div>
-      <div class="cp2" style="background-color:#555555;width:490px;height:90px;position: absolute;top:190px;left:205px"></div>
-      <div class="pk2" style="background-color:#555555;width:20px;height:20px;position: absolute;top:190px;left:800px"></div>
-      <div class="pk1" style="background-color:#555555;width:20px;height:20px;position: absolute;top:290px;left:800px"></div>
-      <div class="cp1" style="background-color:#555555;width:490px;height:90px;position: absolute;top:290px;left:205px"></div>
-      <div class="sp1" style="background-color:#555555;width:700px;height:90px;position: absolute;top:390px;left:100px"></div>
-      <div class="l1" style="background-color:#555555;width:100px;height:70px;position: absolute;top:490px;left:400px"></div>
-      <div class="session1" style="color:white;background-color:#555555;width:280px;height:20px;position: absolute;top:490px;left:100px"></div>
-    </div>
-    <div style="float:left;background-color:#AAAAAA;width:100px;height:570px;position: absolute;top:10px;left:1020px">
-      <div id="myDiv">
-        Response
-      </div>
-      <button id="b01" type="button">flash</button>
-      <button id="zhuapai" type="button">zhua pai</button>
-      <input id="dachu_index" value="0" size="1"/><button id="dachu" type="button">dachu</button>
-      <input id="att" value="0" size="1"/><input id="byatt" value="0" size="1"/><button id="attack" type="button">attack</button>
-      <button id="stop" type="button">stop</button>
-      <button id="ini" type="button">ini</button>
-    </div>
 
-  </body>
+.line {
+	background-color: red;
+	width: 1px;
+	height: 1px;
+	position: absolute;
+}
+
+.pai {
+	float: left;
+	background-color: rgb(109, 143, 41);
+	width: 50px;
+	height: 70px;
+	border: 10px solid rgb(173, 218, 77);
+}
+
+.ospai {
+	float: left;
+	background-color: rgb(109, 143, 41);
+	width: 50px;
+	height: 70px;
+	border: 10px solid rgb(111, 111, 111);
+}
+
+.attack {
+	text-align: center;
+	color: blue;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 60px;
+}
+
+.price {
+	text-align: center;
+	color: blue;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: -40px;
+	left: 0px
+}
+
+.life {
+	text-align: center;
+	color: red;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 50px;
+	left: 30px
+}
+
+.name {
+	text-align: center;
+	color: white;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 5px;
+	left: 15px
+}
+
+.l {
+	text-align: center;
+	color: red;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 25px;
+	left: 40px
+}
+
+.f {
+	text-align: center;
+	color: blue;
+	background-color: rgb(109, 143, 111);
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 50px;
+	left: 80px
+}
+</style>
+<title></title>
+</head>
+<body>
+	<div id=overlay>
+		<img
+			style="position: absolute; left: 50%; top: 190px; margin-left: -390px"
+			src="http://mimg.127.net/m/lb/img/inboxBottom/240/2/promPic.jpg">
+	</div>
+	<div id=main
+		style="background-color: #AAAAAA; width: 1000px; height: 570px; position: absolute; top: 10px; left: 10px">
+		<div class="session2"
+			style="color: white; background-color: #555555; width: 280px; height: 20px; position: absolute; top: 10px; left: 100px"></div>
+		<div class="l2"
+			style="background-color: #555555; width: 100px; height: 70px; position: absolute; top: 10px; left: 400px"></div>
+		<div class="jiji"
+			style="background-color: #555555; width: 100px; height: 70px; position: absolute; top: 10px; left: 800px"></div>
+		<div class="stage"
+			style="background-color: #555555; width: 100px; height: 70px; position: absolute; top: 10px; left: 680px"></div>
+		<div class="sp2"
+			style="background-color: #555555; width: 700px; height: 90px; position: absolute; top: 90px; left: 100px"></div>
+		<div class="cp2"
+			style="background-color: #555555; width: 490px; height: 90px; position: absolute; top: 190px; left: 205px"></div>
+		<div class="pk2"
+			style="background-color: #555555; width: 20px; height: 20px; position: absolute; top: 190px; left: 800px"></div>
+		<div class="pk1"
+			style="background-color: #555555; width: 20px; height: 20px; position: absolute; top: 290px; left: 800px"></div>
+		<div class="cp1"
+			style="background-color: #555555; width: 490px; height: 90px; position: absolute; top: 290px; left: 205px"></div>
+		<div class="sp1"
+			style="background-color: #555555; width: 700px; height: 90px; position: absolute; top: 390px; left: 100px"></div>
+		<div class="l1"
+			style="background-color: #555555; width: 100px; height: 70px; position: absolute; top: 490px; left: 400px"></div>
+		<div class="session1"
+			style="color: white; background-color: #555555; width: 280px; height: 20px; position: absolute; top: 490px; left: 100px"></div>
+	</div>
+	<div
+		style="float: left; background-color: #AAAAAA; width: 100px; height: 570px; position: absolute; top: 10px; left: 1020px">
+		<div id="myDiv">Response</div>
+		<div id="info"></div>
+		<button id="b01" type="button">flash</button>
+		<button id="zhuapai" type="button">zhua pai</button>
+		<input id="dachu_index" value="0" size="1" />
+		<button id="dachu" type="button">dachu</button>
+		<input id="att" value="0" size="1" /><input id="byatt" value="0"
+			size="1" />
+		<button id="attack" type="button">attack</button>
+		<button id="stop" type="button">stop</button>
+		<button id="ini" type="button">ini</button>
+	</div>
+
+</body>
 </html>

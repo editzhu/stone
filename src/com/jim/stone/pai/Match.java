@@ -192,13 +192,19 @@ public class Match {
 	if (player[att].cp.get(attacker).getStep() <= 0)
 	    return;
 	if (byAttacker == 7) {// 7就是本体
-	    player[byAtt].life = player[byAtt].life - player[att].cp.get(attacker).attack;
+	    // 攻击
+	    player[byAtt].life -= player[att].cp.get(attacker).attack;
+	    // 反弹伤害,7号不反弹
+
 	    // 减步
 	    player[att].cp.get(attacker).setStep(0);
 	} else {
 	    if (player[att].cp.size() <= attacker || player[byAtt].cp.size() <= byAttacker)
 		return;
-	    player[byAtt].cp.get(byAttacker).life = player[byAtt].cp.get(byAttacker).life - player[att].cp.get(attacker).attack;
+	    // 攻击
+	    player[byAtt].cp.get(byAttacker).life -= player[att].cp.get(attacker).attack;
+	    // 反弹伤害
+	    player[att].cp.get(attacker).life -= player[byAtt].cp.get(byAttacker).attack;
 	    // 减步
 	    player[att].cp.get(attacker).setStep(0);
 	}
@@ -231,9 +237,12 @@ public class Match {
 	if (playerId == 1) {
 	    stage += 1;
 	    // 每回合加费
-	    player[0].price = stage;
-	    player[1].price = stage;
-
+	    player[0].price = stage + 10;
+	    player[1].price = stage + 10;
+	}
+	// 每回合加step
+	for (int j = 0; j < player[playerId].cp.size(); j++) {
+	    player[playerId].cp.get(j).setStep(1);
 	}
     }
 

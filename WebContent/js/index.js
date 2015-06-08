@@ -15,6 +15,7 @@ $(document).ready(
 //				$("button").removeAttr("disabled");
 				hideOverlay();
 			}
+
 			$("#b01").click(function() {
 				send("flash");
 			});
@@ -62,7 +63,7 @@ $(document).ready(
 				}
 				
 				if(obj.stage==0){
-					hide();
+//					hide();
 					return;
 				}
 				show();
@@ -117,7 +118,7 @@ $(document).ready(
 					}
 					
 					$(".cp1").append(
-							"<div class="+isos+"pai>" + "<div class=attack>"
+							"<div class="+isos+"pai idtt="+i+">" + "<div class=attack>"
 									+ obj.cp1[i].attack + "</div>"
 									+ "<div class=life>" + obj.cp1[i].life
 									+ "</div>" + "<div class=name>"
@@ -130,12 +131,12 @@ $(document).ready(
 				for (var i = 0; i < obj.cp2.length; i++) {
 					//判断是否setp=0,改变css
 					var isos="";
-					if(obj.cp1[i].step==0){
+					if(obj.cp2[i].step==0){
 						isos="os";
 					}
 					
 					$(".cp2").append(
-							"<div class="+isos+"pai>" + "<div class=attack>"
+							"<div class="+isos+"pai idtt="+i+">" + "<div class=attack>"
 									+ obj.cp2[i].attack + "</div>"
 									+ "<div class=life>" + obj.cp2[i].life
 									+ "</div>" + "<div class=name>"
