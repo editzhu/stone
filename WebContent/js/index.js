@@ -19,14 +19,6 @@ $(document).ready(
 			$("#b01").click(function() {
 				send("flash");
 			});
-			$("div").dblclick(function(event) {
-				// alert($(this).html());
-				// alert($(this).children().first().attr("id"));
-
-				// $("#myDiv").html(event.pageX + ", " + event.pageY );
-				// event.stopPropagation();
-			});
-
 			$("#zhuapai").click(function() {
 				send("zhuapai");
 			});
